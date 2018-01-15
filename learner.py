@@ -11,8 +11,10 @@ from sklearn import cluster
 
 clean_name='cleandata.txt'
 malicious_name='maliciousdata.txt'
-clean_test_name='cleandata.txt.test'
-malicious_test_name='maliciousdata.txt.test'
+#clean_test_name='cleandata.txt.test'
+clean_test_name='cleandata'
+#malicious_test_name='maliciousdata.txt.test'
+malicious_test_name='testdata'
 
 
 MONITOR = False
@@ -147,8 +149,14 @@ x_test = np.concatenate((clean_x_test, malicious_x_test),axis=0)
 x_test = x_test[:,rfecv.support_]
 y_test = np.concatenate((clean_y_test, malicious_y_test),axis=0)
 
+pr =  clf.predict(x_test)
 print "Result: \t",  clf.predict(x_test)
 print "Should be: \t",  y_test.ravel()
+
+add = np.add(pr, y_test.ravel())
+
+print "Total number of mismatches: ", np.where(add%2!=0)[0].shape[0]
+
 
 test = np.genfromtxt('maliciousdata.txt.test.2', unpack=False, converters = {3: lambda s: float(s or 0)})
 test = test[:,rfecv.support_]
